@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+	<bean id="oriFile" class="com.tgb.entity.OriFile">
+	</bean>
+	
+	<bean id="userDao" class="com.tgb.dao.UserDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+	<bean id="oriFileDao" class="com.tgb.dao.daoImpl.OriFileDaoImpl">
+		<property name="sessionFactory" ref="sessionFactory"></property>
+	</bean>
+
+	<bean id="userManagerBase" class="com.tgb.manager.UserManagerImpl">
+		<property name="userDao" ref="userDao"></property>
+	</bean>
+	<bean id="oriFileManagerBase" class="com.tgb.manager.managerImpl.OriFileManagerImpl">
+		<property name="oriFileDao" ref="oriFileDao"></property>
+	</bean>
+	
+	<!-- 此处为代理 -->
+	<bean name="userManager" parent="transactionProxy">
+		<property name="target" ref="userManagerBase"></property>
+	</bean>	
+	<bean name="oriFileManager" parent="transactionProxy">
+		<property name="target" ref="oriFileManagerBase"></property>
+	</bean>	
+</beans>
